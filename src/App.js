@@ -1,29 +1,25 @@
-import { useState } from "react";
-
 export default function App() {
-  const [data, setData] = useState([]);
-
-  const readFileData = async (e) => {
-    const reader = new FileReader();
-
-    try {
-      reader.onload = (result) => {
-        console.log(result);
-        let bl = new Int8Array(result.target.result);
-        console.log("1", bl);
-        setData(bl);
-      };
-
-      reader.readAsArrayBuffer(e.target.files[0]);
-    } catch (err) {
-      console.log("err", err);
-    }
+  const onClick = () => {
+    var tempLink = document.createElement("a");
+    let textArea = document.querySelector("textarea");
+    var taBlob = new Blob([textArea.value], { type: "text/plain" });
+    tempLink.setAttribute("href", URL.createObjectURL(taBlob));
+    tempLink.setAttribute("download", `everyx.txt`);
+    tempLink.click();
+    URL.revokeObjectURL(tempLink.href);
   };
 
   return (
     <>
-      <input type="file" onChange={readFileData} />
-      <div>{data}</div>
+      <div>
+        <textarea></textarea>
+      </div>
+      <button className="save-file" onClick={onClick}>
+        Save File
+      </button>
+      <a className="simple" style={{ display: "none" }}>
+        Download Multi-line Text File (Blob)
+      </a>
     </>
   );
 }
