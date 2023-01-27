@@ -1,3 +1,4 @@
+// Uint16 포멧의 바이너리 파일을 불러오는 예제
 import { useState } from "react";
 
 export default function App() {
@@ -8,22 +9,25 @@ export default function App() {
 
     try {
       reader.onload = (result) => {
-        console.log(result);
-        let bl = new Int8Array(result.target.result);
-        console.log("1", bl);
-        setData(bl);
+        let Uint16 = new Uint16Array(result.target.result);
+        setData(Array.from(Uint16));
       };
-
-      reader.readAsArrayBuffer(e.target.files[0]);
     } catch (err) {
       console.log("err", err);
     }
+    reader.readAsArrayBuffer(e.target.files[0]);
   };
 
   return (
     <>
       <input type="file" onChange={readFileData} />
-      <div>{data}</div>
+      <div>
+        {data.map((v, i) => (
+          <div>
+            {i}:{v}
+          </div>
+        ))}
+      </div>
     </>
   );
 }
