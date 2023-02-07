@@ -1,26 +1,30 @@
 export default function App() {
-  async function saveFile() {
+  async function saveTxtFile() {
     let textArea = document.querySelector("textarea");
-    var taBlob = new Blob([textArea.value], {
-      type: "application/octet-stream",
+    var blob = new Blob([textArea.value], {
+      type: "plain/text",
     });
-    const fileHandle = await window.showSaveFilePicker();
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: "everyx.txt",
+    });
     const fileStream = await fileHandle.createWritable();
 
-    await fileStream.write(taBlob);
+    await fileStream.write(blob);
     await fileStream.close();
   }
 
   async function saveBinFile() {
     let textArea = document.querySelector("textarea");
-    const data = textArea.value.split(",");
-    const test = new Uint16Array(data);
-    const fileHandle = await window.showSaveFilePicker();
+    const arrData = textArea.value.split(",");
+    const uint16Data = new Uint16Array(arrData);
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: "everyx.bin",
+    });
     const fileStream = await fileHandle.createWritable();
-    var taBlob = new Blob([test], {
+    var blob = new Blob([uint16Data], {
       type: "application/octet-stream",
     });
-    await fileStream.write(taBlob);
+    await fileStream.write(blob);
     await fileStream.close();
   }
 
@@ -29,12 +33,8 @@ export default function App() {
       <div>
         <textarea defaultValue={"500, 700, 800, 250"}></textarea>
       </div>
-      <button className="save-file" onClick={saveFile}>
-        Save File
-      </button>
-      <button className="save-file" onClick={saveBinFile}>
-        Save Bin. File
-      </button>
+      <button onClick={saveTxtFile}>Save File</button>
+      <button onClick={saveBinFile}>Save Bin. File</button>
     </>
   );
 }
