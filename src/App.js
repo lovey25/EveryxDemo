@@ -28,6 +28,21 @@ export default function App() {
     await fileStream.close();
   }
 
+  async function detourSaveBinFile() {
+    let textArea = document.querySelector("textarea");
+    const arrData = textArea.value.split(",");
+    const uint16Data = new Uint16Array(arrData);
+    var blob = new Blob([uint16Data], {
+      type: "application/octet-stream",
+    });
+
+    var tempLink = document.createElement("a");
+    tempLink.setAttribute("href", URL.createObjectURL(blob));
+    tempLink.setAttribute("download", `everyx.bin`);
+    tempLink.click();
+    URL.revokeObjectURL(tempLink.href);
+  }
+
   return (
     <>
       <div>
@@ -35,6 +50,8 @@ export default function App() {
       </div>
       <button onClick={saveTxtFile}>Save File</button>
       <button onClick={saveBinFile}>Save Bin. File</button>
+      <button onClick={detourSaveBinFile}>detour Save</button>
+      <a style={{ display: "none" }}>Download Blob</a>
     </>
   );
 }
